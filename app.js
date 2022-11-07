@@ -22,8 +22,8 @@ app.use(express.json())
 app.use(cors())
 
 app.post('/updateinfo', (req, res) => {
-    const { nombre, apellido, id, email, fechaNacimiento } = req.body
-    const query = `UPDATE personas SET nombre = '${nombre}', apellidos = '${apellido}', email = '${email}', fecha_nacimiento = '${fechaNacimiento}' WHERE id = ${id}`
+    const { nombre, apellidos, id, email, fecha_nacimiento } = req.body
+    const query = `UPDATE personas SET nombre = '${nombre}', apellidos = '${apellidos}', email = '${email}', fecha_nacimiento = '${fecha_nacimiento}' WHERE id = ${id}`
     connection.query(query, (err, result) => {
         if (err) throw err
         res.send(result)
@@ -31,8 +31,8 @@ app.post('/updateinfo', (req, res) => {
 })
 
 app.post('/updatepassword', (req, res) => {
-    const { id, password } = req.body
-    const query = `UPDATE personas SET password = '${password}' WHERE id = ${id}`
+    const { id, contraseña } = req.body
+    const query = `UPDATE personas SET contraseña = '${contraseña}' WHERE id = ${id}`
     connection.query(query, (err, result) => {
         if (err) throw err
         res.send(result)
@@ -51,7 +51,7 @@ app.listen(PORT, async () => {
             port: PORT,
         }
     })
-    await axios.post('http://localhost:3000/switch/auth', {
+    await axios.post('http://localhost:3000/switch/account', {
         "url": "http://localhost:3005",
         "enabled": true
     })
