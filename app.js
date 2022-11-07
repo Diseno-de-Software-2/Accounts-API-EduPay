@@ -4,7 +4,7 @@ const axios = require('axios')
 const HOST = 'localhost'
 const cors = require('cors')
 const mysql = require('mysql2')
-const PORT = 3005 || process.env.PORT
+const PORT = 3150 || process.env.PORT
 
 const connection = mysql.createConnection({
     host: 'localhost',
