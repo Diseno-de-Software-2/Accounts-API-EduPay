@@ -3,6 +3,7 @@ const app = express()
 const axios = require('axios')
 const HOST = 'localhost'
 const cors = require('cors')
+const morgan = require('morgan')
 const mysql = require('mysql2')
 const PORT = 3150 || process.env.PORT
 
@@ -20,6 +21,7 @@ connection.connect(function (err) {
 
 app.use(express.json())
 app.use(cors())
+app.use(morgan('dev'))
 
 app.post('/updateinfo', (req, res) => {
     const { nombre, apellidos, id, email, fecha_nacimiento } = req.body
