@@ -54,7 +54,7 @@ app.listen(PORT, async () => {
         }
     })
     await axios.post('http://localhost:3000/switch/account', {
-        "url": "http://localhost:3005",
+        "url": "http://localhost:" + PORT,
         "enabled": true
     })
     console.log(response.data)
