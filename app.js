@@ -41,6 +41,44 @@ app.post('/updatepassword', (req, res) => {
     })
 })
 
+app.post('/addtarjeta', (req, res) => {
+    const { id, numero, nombre_titular, fecha_expiracion, cvv, proveedor } = req.body
+    const query = `INSERT INTO tarjetas (id_persona, numero, nombre_titular, fecha_expiracion, cvv, proveedor) VALUES (${id}, '${numero}', '${nombre_titular}', '${fecha_expiracion}','${cvv}', '${proveedor}')`
+    console.log(query)
+    connection.query(query, (err, result) => {
+        if (err) throw err
+        res.send(result)
+    })
+})
+
+app.post('/deletetarjeta', (req, res) => {
+    const { id } = req.body
+    const query = `DELETE FROM tarjetas WHERE id = ${id}`
+    connection.query(query, (err, result) => {
+        if (err) throw err
+        res.send(result)
+    })
+})
+
+
+app.post('/addcuenta', (req, res) => {
+    const { id, numero, nombre_titular, email, banco } = req.body
+    const query = `INSERT INTO cuentas (id_persona, numero, nombre_titular, email, banco) VALUES (${id}, '${numero}', '${nombre_titular}', '${email}','${banco}')`
+    connection.query(query, (err, result) => {
+        if (err) throw err
+        res.send(result)
+    })
+})
+
+app.post('/deletecuenta', (req, res) => {
+    const { id } = req.body
+    const query = `DELETE FROM cuentas WHERE id = ${id}`
+    connection.query(query, (err, result) => {
+        if (err) throw err
+        res.send(result)
+    })
+})
+
 app.listen(PORT, async () => {
     const response = await axios({
         method: 'post',
