@@ -5,6 +5,8 @@ const HOST = 'localhost'
 const cors = require('cors')
 const morgan = require('morgan')
 const mysql = require('mysql2')
+var setTerminalTitle = require('set-terminal-title');
+setTerminalTitle('Accounts Service', { verbose: true });
 const PORT = 3150 || process.env.PORT
 
 const connection = mysql.createConnection({

@@ -14,7 +14,7 @@ npm install
 
 Remenber to run the database and the **API GATEWAY** before running the API.
 
-Finally, you can run the authentication API:
+Finally, you can run the accounts API:
 
 ```bash
 npm run dev
@@ -22,6 +22,6 @@ npm run dev
 
 ## Port
 
-The authentication API will be running on port 3150.
+The accounts API will be running on port 3150.
 
 You can create instances by changing the port number in the app.js file and running the API again. The assign port must be between 3150 and 3199.
