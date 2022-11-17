@@ -5,9 +5,12 @@ const HOST = 'localhost'
 const cors = require('cors')
 const morgan = require('morgan')
 const mysql = require('mysql2')
+var portfinder = require('portfinder');
+portfinder.setBasePort(3150);
+portfinder.setHighestPort(3199);
 var setTerminalTitle = require('set-terminal-title');
 setTerminalTitle('Accounts Service', { verbose: true });
-const PORT = 3150 || process.env.PORT
+var PORT;
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -122,22 +125,26 @@ app.post('/deletecuenta', (req, res) => {
     })
 })
 
-app.listen(PORT, async () => {
-    const response = await axios({
-        method: 'post',
-        url: 'http://localhost:3000/register',
-        headers: { 'Content-Type': 'application/json' },
-        data: {
-            apiName: "account",
-            protocol: "http",
-            host: HOST,
-            port: PORT,
-        }
+
+portfinder.getPort(function (err, port) {
+    PORT = port;
+    app.listen(PORT, async () => {
+        const response = await axios({
+            method: 'post',
+            url: 'http://localhost:3000/register',
+            headers: { 'Content-Type': 'application/json' },
+            data: {
+                apiName: "account",
+                protocol: "http",
+                host: HOST,
+                port: PORT,
+            }
+        })
+        await axios.post('http://localhost:3000/switch/account', {
+            "url": "http://localhost:" + PORT,
+            "enabled": true
+        })
+        console.log(response.data)
+        console.log(`Auth server listening on port ${PORT}`)
     })
-    await axios.post('http://localhost:3000/switch/account', {
-        "url": "http://localhost:" + PORT,
-        "enabled": true
-    })
-    console.log(response.data)
-    console.log(`Auth server listening on port ${PORT}`)
 })
