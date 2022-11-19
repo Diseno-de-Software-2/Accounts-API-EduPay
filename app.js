@@ -56,24 +56,28 @@ app.post('/addtarjeta', (req, res) => {
     // look if the card exists in the bank
     axios.get(`http://${HOST}:5000/tarjeta-${numero}`)
         .then(response => {
-            if (response.data.length > 0 && response.data != 'Empty result') {
-                // check if the camps are the same
-                const { numero: numero_res, nombre_titular: nombre_titular_res, fecha_expiracion: fecha_expiracion_res, cvv: cvv_res, proveedor: proveedor_res } = response.data[0]
-                console.log(response.data[0])
-                console.log(req.body)
-                const fecha_expiracion_res_temp = fecha_expiracion_res.split('T')[0]
-                if (numero_res === numero && nombre_titular_res === nombre_titular && fecha_expiracion_res_temp === fecha_expiracion && cvv_res === cvv && proveedor_res === proveedor) {
-                    const query = `INSERT INTO tarjetas (id_persona, numero, nombre_titular, fecha_expiracion, cvv, proveedor) VALUES (${id}, '${numero}', '${nombre_titular}', '${fecha_expiracion}','${cvv}', '${proveedor}')`
-                    console.log(query)
-                    connection.query(query, (err, result) => {
-                        if (err) throw err
-                        res.send('Tarjeta agregada')
-                    })
-                } else {
-                    res.send('Datos incorrectos')
-                }
+            if (response.data == 'Consultas deshabilitadas') {
+                return res.status(503).json({ message: 'consultas deshabilitadas por parte del banco', service: 'Consultas bancarias' })
             } else {
-                res.send('Tarjeta no existe')
+                if (response.data.length > 0 && response.data != 'Empty result') {
+                    // check if the camps are the same
+                    const { numero: numero_res, nombre_titular: nombre_titular_res, fecha_expiracion: fecha_expiracion_res, cvv: cvv_res, proveedor: proveedor_res } = response.data[0]
+                    console.log(response.data[0])
+                    console.log(req.body)
+                    const fecha_expiracion_res_temp = fecha_expiracion_res.split('T')[0]
+                    if (numero_res === numero && nombre_titular_res === nombre_titular && fecha_expiracion_res_temp === fecha_expiracion && cvv_res === cvv && proveedor_res === proveedor) {
+                        const query = `INSERT INTO tarjetas (id_persona, numero, nombre_titular, fecha_expiracion, cvv, proveedor) VALUES (${id}, '${numero}', '${nombre_titular}', '${fecha_expiracion}','${cvv}', '${proveedor}')`
+                        console.log(query)
+                        connection.query(query, (err, result) => {
+                            if (err) throw err
+                            res.send('Tarjeta agregada')
+                        })
+                    } else {
+                        res.send('Datos incorrectos')
+                    }
+                } else {
+                    res.send('Tarjeta no existe')
+                }
             }
         })
         .catch(error => {
